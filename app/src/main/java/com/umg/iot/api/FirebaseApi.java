@@ -41,7 +41,11 @@ public class FirebaseApi {
     }
 
     public DatabaseReference getIntruderDatabaseReference(){
-        return getDatabaseReference().getRoot().child(INTRUDER_PATH);
+        return getDatabaseReference().child(INTRUDER_PATH);
+    }
+
+    public DatabaseReference getPanicoDatabaseReference(){
+        return getDatabaseReference().child(PANIC_PATH);
     }
 
     public String getAuthUserEmail(){

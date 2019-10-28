@@ -1,5 +1,7 @@
 package com.umg.iot.temperature;
 
+import com.umg.iot.models.Temperature;
+
 public class TemperatureInteractorImpl implements TemperatureInteractor {
 
     private TemperatureRepository repository;
@@ -17,4 +19,5 @@ public class TemperatureInteractorImpl implements TemperatureInteractor {
     public void unsubscribe() {
         repository.unsubscribe();
     }
+
 }

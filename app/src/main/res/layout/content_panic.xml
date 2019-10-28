@@ -9,7 +9,7 @@
     android:foreground="?android:attr/selectableItemBackground"
     app:cardUseCompatPadding="true">
     <View
-        android:id="@+id/indicator_appointment_status"
+        android:id="@+id/indicator_status"
         android:layout_width="8dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -45,7 +45,7 @@
             android:background="#E0E0E0" />
 
         <TextView
-            android:id="@+id/txtTemperatura"
+            android:id="@+id/txtTitle"
             style="@style/Base.TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,27 +53,27 @@
             android:layout_marginLeft="16dp"
             android:layout_toEndOf="@+id/vertical_separator"
             android:layout_toRightOf="@+id/vertical_separator"
-            tools:text="Temperatura: 38C" />
+            tools:text="Title" />
 
         <TextView
-            android:id="@+id/txtHumedad"
+            android:id="@+id/txtDescription"
             style="@style/Base.TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtTemperatura"
+            android:layout_below="@+id/txtTitle"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_toEndOf="@+id/vertical_separator"
             android:layout_toRightOf="@+id/vertical_separator"
-            tools:text="Humedad: 80%" />
+            tools:text="Descripcion" />
 
         <TextView
             android:id="@+id/hora"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtHumedad"
-            android:layout_alignStart="@+id/txtHumedad"
-            android:layout_alignLeft="@+id/txtHumedad"
+            android:layout_below="@+id/txtDescription"
+            android:layout_alignStart="@+id/txtDescription"
+            android:layout_alignLeft="@+id/txtDescription"
             tools:text="Hora" />
         <TextView
             android:id="@+id/status"

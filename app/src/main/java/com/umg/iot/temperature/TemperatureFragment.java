@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.umg.iot.Notification;
 import com.umg.iot.R;
 import com.umg.iot.models.Temperature;
 import com.umg.iot.temperature.adapter.OnItemTemperatureClickListener;
@@ -33,7 +35,7 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.container)
-    FrameLayout container;
+    RelativeLayout container;
 
     private TemperatureListAdapter adapter;
     private TemperaturePresenter presenter;
@@ -61,6 +63,7 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
     public void onResume() {
         super.onResume();
         presenter.subScribe();
+        Notification.openActivityNotification(getActivity(),"Sensor de temperatura","Nueva lectura de temperatura");
     }
 
     private void setupAdapter() {
@@ -74,6 +77,7 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
 
     @Override
     public void onTemperatureAdd(Temperature temperature) {
+
         adapter.add(temperature);
     }
 
@@ -84,6 +88,7 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
 
     @Override
     public void onDestroy() {
+        presenter.unSubcribe();
         presenter.onDestroy();
         super.onDestroy();
     }
@@ -98,7 +103,7 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
     public void onItemLongClick(Temperature temperature) {
         if(temperature.getEstado() == 0)
         {
-            Toast.makeText(getContext(), "ONLONGCLICK", Toast.LENGTH_SHORT).show();
+
         }
     }
 }

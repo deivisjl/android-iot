@@ -1,4 +1,4 @@
-package com.umg.iot.temperature;
+package com.umg.iot.panico;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,36 +6,34 @@ import androidx.annotation.Nullable;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.umg.iot.api.FirebaseApi;
 import com.umg.iot.lib.EventBus;
 import com.umg.iot.lib.GreenRobotEventBus;
+import com.umg.iot.models.Panico;
 import com.umg.iot.models.Temperature;
 
-public class TemperatureRepositoryImpl implements TemperatureRepository {
-
+public class PanicoRepositoryImpl implements PanicoRepository {
     private FirebaseApi helper;
     private ChildEventListener listener;
 
-    public TemperatureRepositoryImpl() {
+    public PanicoRepositoryImpl() {
         helper = FirebaseApi.getInstance();
     }
 
     @Override
     public void subscribe() {
-        if(listener == null)
-        {
+        if(listener == null){
             listener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Temperature temperature = dataSnapshot.getValue(Temperature.class);
-                    postEvent(TemperatureEvent.onTemperatureAdded, temperature, null);
+                    Panico panico = dataSnapshot.getValue(Panico.class);
+                    postEvent(PanicoEvent.onPanicoAdded, panico, null);
                 }
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Temperature temperature = dataSnapshot.getValue(Temperature.class);
-                    postEvent(TemperatureEvent.onTemperatureChanged, temperature,null);
+                    Panico panico = dataSnapshot.getValue(Panico.class);
+                    postEvent(PanicoEvent.onPanicoUpdated, panico, null);
                 }
 
                 @Override
@@ -54,29 +52,31 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
                 }
             };
         }
-        helper.getTemperatureDatabaseReference().addChildEventListener(listener);
+
+        helper.getPanicoDatabaseReference().addChildEventListener(listener);
+    }
+
+    private void postEvent(int type, Panico panico,String msg) {
+        PanicoEvent event = new PanicoEvent();
+
+        event.setType(type);
+        event.setPanico(panico);
+        event.setMessage(msg);
+
+        EventBus eventBus = GreenRobotEventBus.getInstace();
+        eventBus.post(event);
     }
 
     @Override
     public void unsubscribe() {
         if(listener != null)
         {
-            helper.getTemperatureDatabaseReference().removeEventListener(listener);
+            helper.getPanicoDatabaseReference().removeEventListener(listener);
         }
     }
 
     @Override
     public void destroyListener() {
         listener = null;
-    }
-
-    private void postEvent(int type, Temperature temperature, String msg) {
-        TemperatureEvent event = new TemperatureEvent();
-        event.setType(type);
-        event.setTemperature(temperature);
-        event.setMessage(msg);
-
-        EventBus eventBus = GreenRobotEventBus.getInstace();
-        eventBus.post(event);
     }
 }

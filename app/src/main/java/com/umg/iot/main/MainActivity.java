@@ -19,6 +19,7 @@ import com.umg.iot.intruder.IntruderFragment;
 import com.umg.iot.lib.MySharedPreference;
 import com.umg.iot.login.LoginActivity;
 import com.umg.iot.main.adapter.MainSectionsPagerAdapter;
+import com.umg.iot.panico.PanicoFragment;
 import com.umg.iot.temperature.TemperatureFragment;
 
 import butterknife.BindView;
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-        Fragment[] fragments = new Fragment[]{new TemperatureFragment(), new IntruderFragment()};
-        String[] titles = new String[]{getString(R.string.main_header_temperature), getString(R.string.main_header_intruder)};
+        Fragment[] fragments = new Fragment[]{new TemperatureFragment(), new IntruderFragment(), new PanicoFragment()};
+        String[] titles = new String[]{getString(R.string.main_header_temperature), getString(R.string.main_header_intruder),getString(R.string.main_header_panico)};
         MainSectionsPagerAdapter adapter = new MainSectionsPagerAdapter(getSupportFragmentManager(),1, fragments, titles);
 
 

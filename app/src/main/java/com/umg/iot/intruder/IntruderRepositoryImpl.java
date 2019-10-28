@@ -1,4 +1,4 @@
-package com.umg.iot.temperature;
+package com.umg.iot.intruder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,18 +6,17 @@ import androidx.annotation.Nullable;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.umg.iot.api.FirebaseApi;
 import com.umg.iot.lib.EventBus;
 import com.umg.iot.lib.GreenRobotEventBus;
-import com.umg.iot.models.Temperature;
+import com.umg.iot.models.Intruder;
 
-public class TemperatureRepositoryImpl implements TemperatureRepository {
+public class IntruderRepositoryImpl implements IntruderRepository{
 
     private FirebaseApi helper;
     private ChildEventListener listener;
 
-    public TemperatureRepositoryImpl() {
+    public IntruderRepositoryImpl() {
         helper = FirebaseApi.getInstance();
     }
 
@@ -28,14 +27,14 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
             listener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Temperature temperature = dataSnapshot.getValue(Temperature.class);
-                    postEvent(TemperatureEvent.onTemperatureAdded, temperature, null);
+                    Intruder intruder = dataSnapshot.getValue(Intruder.class);
+                    postEvent(IntruderEvent.onIntruderAdded, intruder, null);
                 }
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Temperature temperature = dataSnapshot.getValue(Temperature.class);
-                    postEvent(TemperatureEvent.onTemperatureChanged, temperature,null);
+                    Intruder intruder = dataSnapshot.getValue(Intruder.class);
+                    postEvent(IntruderEvent.onIntruderUpdated, intruder, null);
                 }
 
                 @Override
@@ -54,29 +53,29 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
                 }
             };
         }
-        helper.getTemperatureDatabaseReference().addChildEventListener(listener);
+        helper.getIntruderDatabaseReference().addChildEventListener(listener);
+    }
+
+    private void postEvent(int type, Intruder intruder, String msg) {
+        IntruderEvent event = new IntruderEvent();
+        event.setType(type);
+        event.setIntruder(intruder);
+        event.setMessage(msg);
+
+        EventBus eventBus = GreenRobotEventBus.getInstace();
+        eventBus.post(event);
     }
 
     @Override
     public void unsubscribe() {
         if(listener != null)
         {
-            helper.getTemperatureDatabaseReference().removeEventListener(listener);
+            helper.getIntruderDatabaseReference().removeEventListener(listener);
         }
     }
 
     @Override
     public void destroyListener() {
         listener = null;
-    }
-
-    private void postEvent(int type, Temperature temperature, String msg) {
-        TemperatureEvent event = new TemperatureEvent();
-        event.setType(type);
-        event.setTemperature(temperature);
-        event.setMessage(msg);
-
-        EventBus eventBus = GreenRobotEventBus.getInstace();
-        eventBus.post(event);
     }
 }
