@@ -5,6 +5,7 @@ import com.umg.iot.models.Temperature;
 public class TemperatureEvent {
     public static final int onTemperatureAdded = 1;
     public static final int onTemperatureChanged = 2;
+    public static final int onTemperatureSuccessUpdated = 3;
 
     private int type;
     private String message;

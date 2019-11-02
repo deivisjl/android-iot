@@ -1,4 +1,4 @@
-package com.umg.iot.temperature;
+package com.umg.iot.gas;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,35 +10,34 @@ import com.google.firebase.database.DatabaseReference;
 import com.umg.iot.api.FirebaseApi;
 import com.umg.iot.lib.EventBus;
 import com.umg.iot.lib.GreenRobotEventBus;
-import com.umg.iot.models.Temperature;
+import com.umg.iot.models.Gas;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TemperatureRepositoryImpl implements TemperatureRepository {
+public class GasRepositoryImpl implements GasRepository {
 
     private FirebaseApi helper;
     private ChildEventListener listener;
 
-    public TemperatureRepositoryImpl() {
-        helper = FirebaseApi.getInstance();
+    public GasRepositoryImpl() {
+        this.helper = FirebaseApi.getInstance();
     }
 
     @Override
     public void subscribe() {
-        if(listener == null)
-        {
+        if(listener == null){
             listener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Temperature temperature = dataSnapshot.getValue(Temperature.class);
-                    postEvent(TemperatureEvent.onTemperatureAdded, temperature, null);
+                    Gas gas = dataSnapshot.getValue(Gas.class);
+                    postEvent(GasEvent.onGasAdded, gas, null);
                 }
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Temperature temperature = dataSnapshot.getValue(Temperature.class);
-                    postEvent(TemperatureEvent.onTemperatureChanged, temperature,null);
+                    Gas gas = dataSnapshot.getValue(Gas.class);
+                    postEvent(GasEvent.onGasUpdated, gas, null);
                 }
 
                 @Override
@@ -57,14 +56,25 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
                 }
             };
         }
-        helper.getTemperatureDatabaseReference().addChildEventListener(listener);
+        helper.getSmockDatabaseReference().addChildEventListener(listener);
+    }
+
+    private void postEvent(int type, Gas gas, String msg) {
+        GasEvent event = new GasEvent();
+
+        event.setType(type);
+        event.setGas(gas);
+        event.setMessage(msg);
+
+        EventBus eventBus = GreenRobotEventBus.getInstace();
+        eventBus.post(event);
     }
 
     @Override
     public void unsubscribe() {
         if(listener != null)
         {
-            helper.getTemperatureDatabaseReference().removeEventListener(listener);
+            helper.getSmockDatabaseReference().removeEventListener(listener);
         }
     }
 
@@ -74,9 +84,9 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
     }
 
     @Override
-    public void updateTemperatura(Temperature temperature) {
-        DatabaseReference ref = helper.getTemperatureDatabaseReference();
-        DatabaseReference objRef = ref.child(temperature.getId());
+    public void updateGas(Gas gas) {
+        DatabaseReference ref = helper.getSmockDatabaseReference();
+        DatabaseReference objRef = ref.child(gas.getId());
 
         Map<String,Object> updates = new HashMap<String, Object>();
         updates.put("Estado",1);
@@ -84,24 +94,14 @@ public class TemperatureRepositoryImpl implements TemperatureRepository {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if(databaseError == null){
-                    postEvent(TemperatureEvent.onTemperatureSuccessUpdated,null);
+                    postEvent(GasEvent.onGasSuccessUpdated,null);
                 }
             }
         });
     }
 
-    private void postEvent(int type, Temperature temperature, String msg) {
-        TemperatureEvent event = new TemperatureEvent();
-        event.setType(type);
-        event.setTemperature(temperature);
-        event.setMessage(msg);
-
-        EventBus eventBus = GreenRobotEventBus.getInstace();
-        eventBus.post(event);
-    }
-
     private void postEvent(int type, String msg){
-        TemperatureEvent event = new TemperatureEvent();
+        GasEvent event = new GasEvent();
         event.setType(type);
         event.setMessage(msg);
 

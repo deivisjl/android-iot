@@ -1,5 +1,6 @@
 package com.umg.iot.temperature.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
 
     private List<Temperature> temperatureList;
     private OnItemTemperatureClickListener clickListener;
+    private ViewHolder holder;
 
     public TemperatureListAdapter(List<Temperature> temperatureList, OnItemTemperatureClickListener clickListener) {
         this.temperatureList = temperatureList;
@@ -30,7 +32,8 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_temperature, parent, false);
-        return new ViewHolder(view);
+        holder = new ViewHolder(view);
+        return holder;
     }
 
     @Override
@@ -66,23 +69,27 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
     public void clear(){
         if (temperatureList.size() > 0){
             temperatureList.clear();
-            notifyDataSetChanged();
+            this.notifyDataSetChanged();
         }
     }
 
     public void add(Temperature temperature){
         if(!temperatureList.contains(temperature)){
             temperatureList.add(0,temperature);
-            notifyDataSetChanged();
+
+            this.notifyDataSetChanged();
         }
 
     }
 
     public void update(Temperature temperature){
+
         if(temperatureList.contains(temperature)){
+
             int index = temperatureList.indexOf(temperature);
             temperatureList.set(index, temperature);
-            notifyDataSetChanged();
+
+            this.notifyDataSetChanged();
         }
     }
 
@@ -107,8 +114,9 @@ public class TemperatureListAdapter extends RecyclerView.Adapter<TemperatureList
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
             this.view = itemView;
+            ButterKnife.bind(this,view);
+
         }
 
         private void setClickListener(final Temperature temperature, final OnItemTemperatureClickListener listener){

@@ -5,4 +5,5 @@ import com.umg.iot.models.Temperature;
 public interface TemperatureInteractor {
     void subscribe();
     void unsubscribe();
+    void updateTemperatura(Temperature temperature);
 }

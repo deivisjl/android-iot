@@ -5,6 +5,7 @@ import com.umg.iot.models.Intruder;
 public class IntruderEvent {
     public static final int onIntruderAdded = 1;
     public static final int onIntruderUpdated = 2;
+    public static final int onIntruderSuccessUpdated = 3;
 
     private int type;
     private String message;

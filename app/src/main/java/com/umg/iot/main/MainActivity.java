@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 import com.umg.iot.R;
 import com.umg.iot.api.FirebaseApi;
+import com.umg.iot.gas.GasFragment;
 import com.umg.iot.intruder.IntruderFragment;
 import com.umg.iot.lib.MySharedPreference;
 import com.umg.iot.login.LoginActivity;
@@ -54,10 +55,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-        Fragment[] fragments = new Fragment[]{new TemperatureFragment(), new IntruderFragment(), new PanicoFragment()};
-        String[] titles = new String[]{getString(R.string.main_header_temperature), getString(R.string.main_header_intruder),getString(R.string.main_header_panico)};
+        Fragment[] fragments = new Fragment[]{new TemperatureFragment(), new IntruderFragment(), new PanicoFragment(), new GasFragment()};
+        String[] titles = new String[]{getString(R.string.main_header_temperature), getString(R.string.main_header_intruder),getString(R.string.main_header_panico), getString(R.string.main_header_gas)};
         MainSectionsPagerAdapter adapter = new MainSectionsPagerAdapter(getSupportFragmentManager(),1, fragments, titles);
-
 
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);

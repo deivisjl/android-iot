@@ -1,6 +1,7 @@
-package com.umg.iot.panico;
+package com.umg.iot.gas;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,38 +16,37 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.umg.iot.R;
-import com.umg.iot.models.Panico;
-import com.umg.iot.panico.adapter.OnItemPanicoClickListener;
-import com.umg.iot.panico.adapter.PanicoListAdapter;
+import com.umg.iot.gas.adapter.GasListAdapter;
+import com.umg.iot.gas.adapter.OnItemGasClickListener;
+import com.umg.iot.models.Gas;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PanicoFragment extends Fragment implements PanicoView, OnItemPanicoClickListener {
+public class GasFragment extends Fragment implements GasView, OnItemGasClickListener {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.container)
     CoordinatorLayout container;
 
-    private PanicoListAdapter adapter;
-    private PanicoPresenter presenter;
+    private GasListAdapter adapter;
+    private GasPresenter presenter;
 
-    public PanicoFragment() {
+    public GasFragment() {
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable
-            ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content, container, false);
         ButterKnife.bind(this,view);
         setupAdapter();
-        setupRecyclerView();
+        setupRecycler();
 
-        this.presenter = new PanicoPresenterImpl(this);
+        this.presenter = new GasPresenterImpl(this);
         this.presenter.onCreate();
         return view;
     }
@@ -54,26 +54,26 @@ public class PanicoFragment extends Fragment implements PanicoView, OnItemPanico
     @Override
     public void onResume() {
         super.onResume();
-        this.presenter.subScribe();
+        presenter.subScribe();
     }
 
-    private void setupRecyclerView() {
+    private void setupRecycler() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
     }
 
     private void setupAdapter() {
-        this.adapter = new PanicoListAdapter(new ArrayList<Panico>(), this);
+        this.adapter = new GasListAdapter(new ArrayList<Gas>(),this);
     }
 
     @Override
-    public void onPanicoAdded(Panico panico) {
-        adapter.add(panico);
+    public void onGasAdded(Gas gas) {
+        this.adapter.add(gas);
     }
 
     @Override
-    public void onPanicoUpdated(Panico panico) {
-        adapter.update(panico);
+    public void onGasUpdated(Gas gas) {
+        this.adapter.update(gas);
     }
 
     @Override
@@ -82,16 +82,16 @@ public class PanicoFragment extends Fragment implements PanicoView, OnItemPanico
     }
 
     @Override
-    public void onItemLongClick(Panico panico) {
-        if(panico.getEstado() == 0){
-            this.presenter.updatePanico(panico);
+    public void onItemLongClick(Gas gas) {
+        if(gas.getEstado() == 0){
+            this.presenter.updateGas(gas);
         }
     }
 
     @Override
     public void onDestroy() {
-        this.presenter.onDestroy();
         super.onDestroy();
+        presenter.onDestroy();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.umg.iot.intruder;
 
+import com.umg.iot.models.Intruder;
+
 public class IntruderInteractorImpl implements IntruderInteractor{
     private IntruderRepository repository;
 
@@ -15,5 +17,10 @@ public class IntruderInteractorImpl implements IntruderInteractor{
     @Override
     public void unsubscribe() {
         repository.unsubscribe();
+    }
+
+    @Override
+    public void updateIntruder(Intruder intruder) {
+        repository.updateIntruder(intruder);
     }
 }

@@ -1,4 +1,4 @@
-package com.umg.iot.panico.adapter;
+package com.umg.iot.gas.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,38 +9,39 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.umg.iot.R;
-import com.umg.iot.models.Panico;
+import com.umg.iot.models.Gas;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PanicoListAdapter extends RecyclerView.Adapter<PanicoListAdapter.ViewHolder> {
+public class GasListAdapter extends RecyclerView.Adapter<GasListAdapter.ViewHolder> {
 
-    private OnItemPanicoClickListener listener;
-    private List<Panico> panicoList;
+    private List<Gas> gasList;
+    private OnItemGasClickListener listener;
 
-    public PanicoListAdapter(List<Panico> panicoList, OnItemPanicoClickListener listener) {
+    public GasListAdapter(List<Gas> gasList, OnItemGasClickListener listener) {
+        this.gasList = gasList;
         this.listener = listener;
-        this.panicoList = panicoList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_panic, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_gas, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Panico panico = panicoList.get(position);
-        holder.setClickListener(panico,listener);
+        Gas gas = gasList.get(position);
+        holder.setClickListener(gas,listener);
 
         View estado = holder.indicatorStatus;
 
-        switch (panico.getEstado()){
+        switch (gas.getEstado()){
             case 0:
                 estado.setBackgroundResource(R.color.activeStatus);
                 holder.status.setText("Estado: Activa");
@@ -51,25 +52,29 @@ public class PanicoListAdapter extends RecyclerView.Adapter<PanicoListAdapter.Vi
                 break;
         }
 
-        holder.txtTitle.setText(panico.getTitulo());
-        holder.txtDescription.setText(panico.getMensaje());
-        holder.txtDate.setText(panico.getFecha());
-        holder.hora.setText(panico.getHora());
+        holder.txtTitle.setText(gas.getMensaje());
+        holder.txtDate.setText(gas.getFecha());
+        holder.hora.setText(gas.getHora());
     }
 
-    public void add(Panico panico){
-        if(!panicoList.contains(panico)){
-            panicoList.add(0,panico);
+    @Override
+    public int getItemCount() {
+        return gasList.size();
+    }
+
+    public void add(Gas gas){
+        if(!gasList.contains(gas)){
+            gasList.add(0,gas);
 
             notifyItemInserted(0);
             notifyDataSetChanged();
         }
     }
 
-    public void update(Panico panico){
-        if(panicoList.contains(panico)){
-            int index = panicoList.indexOf(panico);
-            panicoList.set(index, panico);
+    public void update(Gas gas){
+        if(gasList.contains(gas)){
+            int index = gasList.indexOf(gas);
+            gasList.set(index, gas);
 
             notifyItemChanged(index);
             notifyDataSetChanged();
@@ -77,15 +82,10 @@ public class PanicoListAdapter extends RecyclerView.Adapter<PanicoListAdapter.Vi
     }
 
     public void clear(){
-        if(panicoList.size() > 0){
-            panicoList.clear();
+        if(gasList.size() > 0){
+            gasList.clear();
             notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return panicoList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -98,8 +98,6 @@ public class PanicoListAdapter extends RecyclerView.Adapter<PanicoListAdapter.Vi
         View verticalSeparator;
         @BindView(R.id.txtTitle)
         TextView txtTitle;
-        @BindView(R.id.txtDescription)
-        TextView txtDescription;
         @BindView(R.id.hora)
         TextView hora;
         @BindView(R.id.status)
@@ -113,12 +111,12 @@ public class PanicoListAdapter extends RecyclerView.Adapter<PanicoListAdapter.Vi
             this.view = itemView;
         }
 
-        private void setClickListener(Panico panico,OnItemPanicoClickListener listener)
+        private void setClickListener(Gas gas, OnItemGasClickListener listener)
         {
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    listener.onItemLongClick(panico);
+                    listener.onItemLongClick(gas);
                     return false;
                 }
             });

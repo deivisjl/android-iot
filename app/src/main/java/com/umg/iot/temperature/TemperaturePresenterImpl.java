@@ -34,6 +34,11 @@ public class TemperaturePresenterImpl implements TemperaturePresenter {
     }
 
     @Override
+    public void updateTemperatura(Temperature temperature) {
+        this.interactor.updateTemperatura(temperature);
+    }
+
+    @Override
     public void onDestroy() {
         eventBus.unregister(this);
     }
@@ -46,16 +51,25 @@ public class TemperaturePresenterImpl implements TemperaturePresenter {
             case TemperatureEvent.onTemperatureAdded:
                     temperatureAdded(event.getTemperature());
                     break;
-            case TemperatureEvent.onTemperatureChanged:
-                   temperatureChanged(event.getTemperature());
+            case TemperatureEvent.onTemperatureSuccessUpdated:
+                   temperatureUpdated();
                    break;
+           case TemperatureEvent.onTemperatureChanged:
+                   temperatureChanged(event.getTemperature());
+               break;
         }
     }
 
     private void temperatureChanged(Temperature temperature) {
+        if(view != null){
+            view.onTemperatureChanged(temperature);
+        }
+    }
+
+    private void temperatureUpdated() {
         if(view != null)
         {
-            view.onTemperatureChanged(temperature);
+            view.onSuccesChanged();
         }
     }
 

@@ -6,6 +6,7 @@ public class PanicoEvent {
 
     public static final int onPanicoAdded = 1;
     public static final int onPanicoUpdated = 2;
+    public static final int onPanicoSuccessUpdated = 3;
 
     private int type;
     private String message;

@@ -7,6 +7,15 @@ public class Intruder {
     private String Hora;
     private String Mensaje;
     private String Titulo;
+    private String Id;
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
 
     public int getEstado() {
         return Estado;

@@ -50,7 +50,7 @@ public class IntruderListAdapter extends RecyclerView.Adapter<IntruderListAdapte
                 holder.status.setText("Estado: Procesada");
                 break;
         }
-        estado.setBackgroundResource(R.color.intruderStatus);
+
         holder.txtTitle.setText(intruder.getTitulo());
         holder.txtDescription.setText(intruder.getMensaje());
         holder.txtDate.setText(intruder.getFecha());
@@ -72,6 +72,8 @@ public class IntruderListAdapter extends RecyclerView.Adapter<IntruderListAdapte
     public void add(Intruder intruder){
         if(!intruderList.contains(intruder)){
             intruderList.add(0,intruder);
+
+            notifyItemInserted(0);
             notifyDataSetChanged();
         }
     }
@@ -80,6 +82,8 @@ public class IntruderListAdapter extends RecyclerView.Adapter<IntruderListAdapte
         if(intruderList.contains(intruder)){
             int index = intruderList.indexOf(intruder);
             intruderList.set(index, intruder);
+
+            notifyItemChanged(index);
             notifyDataSetChanged();
         }
     }

@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +38,7 @@ public class IntruderFragment extends Fragment  implements IntruderView, OnItemI
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.container)
-    RelativeLayout container;
+    CoordinatorLayout container;
 
     private IntruderListAdapter adapter;
     private IntruderPresenter presenter;
@@ -100,10 +101,15 @@ public class IntruderFragment extends Fragment  implements IntruderView, OnItemI
     }
 
     @Override
+    public void onSuccesChanged() {
+        Toast.makeText(getActivity(), "Registro notificado", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onLongClick(Intruder intruder) {
         if(intruder.getEstado() == 0)
         {
-            Toast.makeText(getActivity(), "OnLongClick", Toast.LENGTH_SHORT).show();
+            this.presenter.updateIntruder(intruder);
         }
     }
 }

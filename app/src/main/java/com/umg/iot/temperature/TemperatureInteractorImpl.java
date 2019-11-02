@@ -20,4 +20,9 @@ public class TemperatureInteractorImpl implements TemperatureInteractor {
         repository.unsubscribe();
     }
 
+    @Override
+    public void updateTemperatura(Temperature temperature) {
+        repository.updateTemperatura(temperature);
+    }
+
 }

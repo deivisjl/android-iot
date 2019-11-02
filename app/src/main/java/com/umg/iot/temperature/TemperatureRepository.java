@@ -6,4 +6,5 @@ public interface TemperatureRepository {
     void subscribe();
     void unsubscribe();
     void destroyListener();
+    void updateTemperatura(Temperature temperature);
 }

@@ -5,4 +5,5 @@ import com.umg.iot.models.Temperature;
 public interface TemperatureView {
     void onTemperatureAdd(Temperature temperature);
     void onTemperatureChanged(Temperature temperature);
+    void onSuccesChanged();
 }

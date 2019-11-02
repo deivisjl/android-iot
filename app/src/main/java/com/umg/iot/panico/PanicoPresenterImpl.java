@@ -41,6 +41,11 @@ public class PanicoPresenterImpl implements PanicoPresenter {
     }
 
     @Override
+    public void updatePanico(Panico panico) {
+        interactor.updatePanico(panico);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(PanicoEvent event) {
         switch (event.getType()){
@@ -50,7 +55,16 @@ public class PanicoPresenterImpl implements PanicoPresenter {
                 case PanicoEvent.onPanicoUpdated:
                     onPanicoUpdate(event.getPanico());
                     break;
+            case PanicoEvent.onPanicoSuccessUpdated:
+                onPanicoSuccesUpdated();
+                break;
 
+        }
+    }
+
+    private void onPanicoSuccesUpdated() {
+        if(view != null){
+            view.onSuccesChanged();
         }
     }
 

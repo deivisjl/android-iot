@@ -43,6 +43,11 @@ public class IntruderPresenterImpl implements IntruderPresenter {
     }
 
     @Override
+    public void updateIntruder(Intruder intruder) {
+        interactor.updateIntruder(intruder);
+    }
+
+    @Override
     @Subscribe
     public void onEventMainThread(IntruderEvent event) {
         switch (event.getType())
@@ -53,6 +58,16 @@ public class IntruderPresenterImpl implements IntruderPresenter {
             case IntruderEvent.onIntruderUpdated:
                     onIntruderUpdate(event.getIntruder());
                 break;
+            case IntruderEvent.onIntruderSuccessUpdated:
+                intruderUpdated();
+                break;
+        }
+    }
+
+    private void intruderUpdated() {
+        if(view != null)
+        {
+            view.onSuccesChanged();
         }
     }
 

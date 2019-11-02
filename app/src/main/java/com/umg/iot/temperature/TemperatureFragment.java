@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.umg.iot.Notification;
 import com.umg.iot.R;
 import com.umg.iot.models.Temperature;
@@ -21,7 +20,6 @@ import com.umg.iot.temperature.adapter.OnItemTemperatureClickListener;
 import com.umg.iot.temperature.adapter.TemperatureListAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +32,10 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    //@BindView(R.id.container)
+    //RelativeLayout container;
     @BindView(R.id.container)
-    RelativeLayout container;
+    CoordinatorLayout container;
 
     private TemperatureListAdapter adapter;
     private TemperaturePresenter presenter;
@@ -63,11 +63,11 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
     public void onResume() {
         super.onResume();
         presenter.subScribe();
-        Notification.openActivityNotification(getActivity(),"Sensor de temperatura","Nueva lectura de temperatura");
+        Notification.openActivityNotification(getActivity(), "Sensor de temperatura", "Nueva lectura de temperatura");
     }
 
     private void setupAdapter() {
-        this.adapter = new TemperatureListAdapter(new ArrayList<Temperature>(),this);
+        this.adapter = new TemperatureListAdapter(new ArrayList<Temperature>(), this);
     }
 
     private void setupRecyclerView() {
@@ -87,6 +87,11 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
     }
 
     @Override
+    public void onSuccesChanged() {
+        Toast.makeText(getActivity(), "Registro actualizado", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onDestroy() {
         presenter.unSubcribe();
         presenter.onDestroy();
@@ -101,9 +106,8 @@ public class TemperatureFragment extends Fragment implements TemperatureView, On
 
     @Override
     public void onItemLongClick(Temperature temperature) {
-        if(temperature.getEstado() == 0)
-        {
-
+        if (temperature.getEstado() == 0) {
+            this.presenter.updateTemperatura(temperature);
         }
     }
 }

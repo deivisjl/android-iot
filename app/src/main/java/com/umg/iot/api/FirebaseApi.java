@@ -48,6 +48,10 @@ public class FirebaseApi {
         return getDatabaseReference().child(PANIC_PATH);
     }
 
+    public DatabaseReference getSmockDatabaseReference(){
+        return getDatabaseReference().child(SMOCK_PATH);
+    }
+
     public String getAuthUserEmail(){
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String email = null;
